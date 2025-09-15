@@ -1,4 +1,5 @@
 // ProjectMap.jsx
+// 📌 이 컴포넌트는 전체 프로젝트들을 '맵' 형태로 배치하고, 마우스로 드래그하여 맵을 이동(panning)할 수 있게 한다.
 import { useEffect, useState } from "react";
 import Project from "./Project";
 import "./ProjectMap.css";

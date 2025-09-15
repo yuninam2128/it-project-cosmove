@@ -1,4 +1,5 @@
 // ProjectForm.js
+// 📌 이 컴포넌트는 새로운 프로젝트를 추가하기 위한 모달 폼을 제공한다.
 import { useState } from "react";
 import "./ProjectForm.css";
 

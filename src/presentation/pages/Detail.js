@@ -1,6 +1,8 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import SubtaskForm from "../components/SubtaskForm";
+
+// React Flow 라이브러리: 노드/엣지 기반 다이어그램
 import ReactFlow, {
   useNodesState,
   useEdgesState,
@@ -81,9 +83,9 @@ function Detail() {
     const subtaskNodes = (project.subtasks || []).map((subtask) => ({
       id: subtask.id.toString(),
       type: "default",
-      data: { label: subtask.title },
+      data: { label: subtask.title }, //제목 표시
       position: {
-        x: Math.random() * 400 + 100,
+        x: Math.random() * 400 + 100, //랜덤 위치
         y: Math.random() * 200 + 100,
       },
       className: "my-node",
@@ -111,6 +113,7 @@ function Detail() {
     }
   }, [project, setNodes, setEdges]);
 
+  //노드 클릭 이벤트
   const onNodeClick = useCallback(
     (event, node) => {
       if (node.id !== CENTER_NODE_ID) {
@@ -122,6 +125,7 @@ function Detail() {
     [navigate, CENTER_NODE_ID, project]
   );
 
+  //노드 연결 이벤트
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -145,12 +149,14 @@ function Detail() {
     setShowForm(false);
   };
 
+  // 새 서브태스크 생성 (id 부여 후 저장)
   const handleSubmitBoth = (newSubtask) => {
     const newId = Date.now();
     const newSubtaskWithId = { id: newId, ...newSubtask };
     handleAddSubtask(newSubtaskWithId);
   };
-
+  
+  // 로딩 화면
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
