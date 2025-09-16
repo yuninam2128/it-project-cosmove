@@ -2,10 +2,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase Timestamp 제거
-import ProjectMap from "../components/project/ProjectMap";
-import ProjectForm from "../components/project/ProjectForm";
-import Inspiration from "../components/inspiration/Inspiration";
-import ProjectTimeline from "../components/project/ProjectTimeline";
+import Header from "../components/header/header"; //(명시)
+import ProjectMap from "../components/project/ProjectMap"; // (명시)
+import TodoList from "../components/todo/Todo"; //(명시)
+import Sidebar from "../components/sidebar/Sidebar"; //(명시)
+import Inspiration from "../components/inspiration/Inspiration"; //(명시)
+import ProjectTimeline from "../components/project/ProjectTimeline"; //(명시)
+
+import ProjectForm from "../components/project/ProjectForm"; // (팝업)
+
 import "./Home.css"
 import { subscribeAuth, getCurrentUserDisplayName } from '../../services/auth';
 // 프로젝트 추가 관련 Firebase 연동 제거: 서비스 호출 사용 안 함
@@ -325,7 +330,55 @@ function Home() {
   }
 
   return ( 
+    // <div className ="container">
+    //   //좌측 사이드바
+    //   {/* <Sidebar /> */}
+
+    //   // 가운데 & 오른쪽 
+    //   <div className="main-content">
+    //     //헤더
+    //     <Header displayName={displayName} isLoadingName={isLoadingName} />
+
+    //     //콘텐트
+    //     <div className="content-area">
+    //         <div className="project-map-container">
+    //           <ProjectMap
+    //             projects={projects}
+    //             positions={positions}
+    //             onDeleteProject={deleteProject}
+    //             onEditProject={editProject}
+    //           onPositionsChange={handlePositionChange}
+    //         />
+          
+    //         {showForm && (
+    //           <ProjectForm
+    //             onSubmit={handleAddProject}
+    //             onClose={() => setShowForm(false)}
+    //           />
+    //         )}
+    //         </div>
+    //       <div>
+    //         <div className="right-sidebar">
+    //           <div className="todo">
+    //             <h3>오늘의 할 일</h3>
+    //             {/*투두리스트 추가예정*/}
+    //           </div>
+    //           <div className="inspiration">
+    //             <Inspiration />
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+
+    //     //타임라인
+    //     <footer className="timeline">
+    //       <ProjectTimeline projects={projects} />
+    //     </footer>
+    //   </div>
+    // </div>
+
     <div className="game-container">
+
       {/* 게임 스타일 사이드바 */}
       <div className="sidebar">
         <div className="profile-section">
