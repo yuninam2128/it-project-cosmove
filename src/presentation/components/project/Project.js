@@ -4,10 +4,10 @@
 import { useState } from "react";
 import { createPortal } from "react-dom"; // 포털을 사용해 모달을 body에 렌더링
 import { Link } from "react-router-dom"; // 프로젝트 상세 페이지 이동을 위한 Link
-import EditProjectForm from "./EditProjectForm"; // 프로젝트 수정 폼 컴포넌트 import
-import "./Project.css"; // 스타일 import
-import penIcon from "./edit.png"; // 수정 아이콘 이미지 import
-import trashcanIcon from "./delete.png" // 삭제 아이콘 이미지 import
+import EditProjectForm from "./EditProjectForm";   // 확장자까지 명시
+import "./styles/Project.css"; // 스타일 import
+import penIcon from "../images/edit.png"; // 수정 아이콘 이미지 import
+import trashcanIcon from "../images/delete.png" // 삭제 아이콘 이미지 import
 
 // Project 컴포넌트 정의, 프로젝트 정보와 콜백 함수, 위치 정보를 props로 받음
 function Project({ project, onDeleteProject, onEditProject, position }) {

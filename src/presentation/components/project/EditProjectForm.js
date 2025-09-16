@@ -1,8 +1,8 @@
 // EditProjectForm.js
-// 이 컴포넌트는 프로젝트 정보를 수정할 수 있는 폼(모달)을 제공합니다.
+// 이 컴포넌트는 프로젝트 정보를 수정할 수 있는 폼(모달)을 제공
 
 import { useState } from "react";
-import "./EditProjectForm.css" // 스타일 파일 import
+import "./styles/EditProjectForm.css" // 스타일 파일 import
 
 // EditProjectForm 컴포넌트 정의, project, onSubmit, onClose prop을 받음
 function EditProjectForm({ project, onSubmit, onClose }) {

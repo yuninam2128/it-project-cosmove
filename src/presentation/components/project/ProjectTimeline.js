@@ -6,7 +6,7 @@
 // - 디버깅을 위해 각 프로젝트의 날짜/진행률 정보를 콘솔과 화면에 표시
 
 import React, { useState, useEffect } from "react";
-import "./ProjectTimeline.css";
+import "./styles/ProjectTimeline.css";
 
 function ProjectTimeline({ projects = [] }) {
   // 🔹 현재 시간을 저장 (진행률 계산 기준)

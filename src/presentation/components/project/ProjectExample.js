@@ -2,9 +2,9 @@
 // 이 컴포넌트는 프로젝트 목록을 보여주고, 프로젝트 생성/수정/삭제 기능을 예시로 제공합니다.
 
 import React, { useState } from 'react';
-import { useProjects } from '../hooks/useProjects'; // 프로젝트 관련 커스텀 훅 import
-import { DIContainer } from '../../infrastructure/container/DIContainer'; // DI 컨테이너 import
-import { CreateProjectDTO, UpdateProjectDTO } from '../../application/dto/ProjectDTO'; // DTO import
+import { useProjects } from '../../hooks/useProjects'; // 프로젝트 관련 커스텀 훅 import
+import { DIContainer } from '../../../infrastructure/container/DIContainer'; // DI 컨테이너 import
+import { CreateProjectDTO, UpdateProjectDTO } from '../../../application/dto/ProjectDTO'; // DTO import
 
 const ProjectExample = () => {
   // DI 컨테이너에서 프로젝트 서비스 인스턴스 가져오기

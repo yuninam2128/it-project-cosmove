@@ -37,7 +37,7 @@ import SignupPage from "./presentation/pages/SignupPage";
 import LoginPage from "./presentation/pages/LoginPage";
 import Store from "./presentation/pages/Store";
 import { AuthProvider } from "./presentation/hooks/useAuth";
-import ErrorBoundary from "./presentation/components/ErrorBoundary";
+import ErrorBoundary from "./presentation/components/subtask/ErrorBoundary";
 
 
 function App() {

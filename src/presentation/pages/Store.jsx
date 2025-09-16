@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CharacterGrid from "../components/CharacterGrid";
+import CharacterGrid from "../components/character/CharacterGrid";
 import charactersData from "../../data/characters";
 
 function Store() {

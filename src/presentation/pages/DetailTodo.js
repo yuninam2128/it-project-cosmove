@@ -1,4 +1,4 @@
-import TodoApp from "../components/Todo";
+import TodoApp from "../components/todo/Todo.js";
 import "./DetailTodo.css"
 
 import { useParams, useNavigate } from "react-router-dom";

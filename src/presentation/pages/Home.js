@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase Timestamp 제거
-import ProjectMap from "../components/ProjectMap";
-import ProjectForm from "../components/ProjectForm";
-import Inspiration from "../components/Inspiration";
-import ProjectTimeline from "../components/ProjectTimeline";
+import ProjectMap from "../components/project/ProjectMap";
+import ProjectForm from "../components/project/ProjectForm";
+import Inspiration from "../components/inspiration/Inspiration";
+import ProjectTimeline from "../components/project/ProjectTimeline";
 import "./Home.css"
 import { subscribeAuth, getCurrentUserDisplayName } from '../../services/auth';
 // 프로젝트 추가 관련 Firebase 연동 제거: 서비스 호출 사용 안 함
@@ -18,15 +18,16 @@ import {
 } from '../../services/projects';
 
 function Home() {
-  const [projects, setProjects] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [positions, setPositions] = useState({});
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState('');
+  const [projects, setProjects] = useState([]); //현재 사용자 프로젝트 리스트 저장
+  const [showForm, setShowForm] = useState(false); //프로젝트 추가 폼 모달 표시 여부
+  const [positions, setPositions] = useState({}); //프로젝트 위치 정보
+  const [currentUser, setCurrentUser] = useState(null); //현재 로그인한 사용자 정보
+  const [isLoading, setIsLoading] = useState(true); //로딩 여부 상태 
+  const navigate = useNavigate(); //페이지 이동 함수 
+  const [displayName, setDisplayName] = useState(''); //이름 가져오는 중인지 여부 
   const [isLoadingName, setIsLoadingName] = useState(true);
 
+  //로그인 상태 구독
   useEffect(() => {
     const unsubscribe = subscribeAuth(async (user) => {
       console.log('Auth state changed:', user);
@@ -78,12 +79,14 @@ function Home() {
     };
   }, [currentUser]);
 
+  // 중요도에 따른 원 크기 반환 
   const getRadius = (priority) => {
     if (priority === "상") return 75;
     if (priority === "중") return 55;
     return 40;
   };
 
+  //프로젝트 추가 
   const handleAddProject = async (newProject) => {
     if (!currentUser) {
       alert('로그인이 필요합니다.');
@@ -123,11 +126,13 @@ function Home() {
 
       const numExisting = Object.keys(positions).length;
 
+      // 첫 프로젝트 중앙 배치
       if (numExisting === 0) {
         x = centerX;
         y = centerY;
         placed = true;
       } else {
+        //기존 프로젝트 주위에 배치 시도 
         const maxDistance = Math.max(mapWidth, screenHeight);
         const step = radius + padding;
         
@@ -156,6 +161,7 @@ function Home() {
           }
         }
         
+        // 그래도 실패하면 격자 방식으로 탐색 
         if (!placed) {
           const gridSize = Math.min(radius * 2 + padding, 50);
           
@@ -173,6 +179,7 @@ function Home() {
           }
         }
         
+        // 최후 수단 : 랜덤 배치 
         if (!placed) {
           const maxRandomAttempts = 200;
           for (let i = 0; i < maxRandomAttempts && !placed; i++) {
@@ -188,6 +195,7 @@ function Home() {
         }
       }
 
+      // 프로젝트를 배치할 공간이 부족합니다.
       if (!placed) {
         alert("프로젝트를 배치할 공간이 부족합니다. 화면을 확대하거나 일부 프로젝트를 삭제해주세요.");
         return;
@@ -215,6 +223,7 @@ function Home() {
     }
   };
 
+  //프로젝트 수정
   const editProject = async (updatedProject) => {
     if (!currentUser) return;
 
@@ -242,6 +251,7 @@ function Home() {
     }
   };
 
+  //프로젝트 삭제
   const deleteProject = async (id) => {
     if (!currentUser) return;
 
@@ -294,6 +304,7 @@ function Home() {
     }
   };
 
+  // 오늘 날짜 문자열 반환 (YYYY-MM-DD)
   const getCurrentDate = () => {
     const today = new Date();
     return today.toISOString().split('T')[0];

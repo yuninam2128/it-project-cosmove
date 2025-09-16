@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./CharacterGrid.css";
 import CharacterDisplay from "./CharacterDisplay";
-import { saveUserCharacterData, getUserCharacterData, initializeUserCharacterData } from "../../services/characters";
-import { subscribeAuth } from "../../services/auth";
+import { saveUserCharacterData, getUserCharacterData, initializeUserCharacterData } from "../../../services/characters";
+import { subscribeAuth } from "../../../services/auth";
 
 function CharacterGrid({ characters, onSelect }) {
   // 사용자 인증 상태

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import inspirationCards from '../../data/cards/CardIndex'; // 이미지 배열 가져오기
+import inspirationCards from '../../../data/cards/CardIndex'; // 이미지 배열 가져오기
 import './Inspiration.css'; // 스타일링을 위한 CSS 파일
 
 function Inspiration () {

@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
-import SubtaskForm from "../components/SubtaskForm";
+import SubtaskForm from "../components/subtask/SubtaskForm";
 
 // React Flow 라이브러리: 노드/엣지 기반 다이어그램
 import ReactFlow, {
@@ -155,7 +155,7 @@ function Detail() {
     const newSubtaskWithId = { id: newId, ...newSubtask };
     handleAddSubtask(newSubtaskWithId);
   };
-  
+
   // 로딩 화면
   if (loading) {
     return (
