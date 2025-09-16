@@ -223,35 +223,6 @@
   backdrop-filter: blur(5px);
 }
 
-/* 테스트 버튼들 */
-.test-buttons {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  display: flex;
-  gap: 12px;
-  z-index: 10;
-}
-
-.test-buttons button {
-  padding: 8px 15px;
-  border: 1px solid rgba(100, 150, 255, 0.4);
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(100, 150, 255, 0.2) 0%, rgba(150, 200, 255, 0.1) 100%);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 13px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-}
-
-.test-buttons button:hover {
-  background: linear-gradient(135deg, rgba(100, 150, 255, 0.4) 0%, rgba(150, 200, 255, 0.2) 100%);
-  border-color: rgba(100, 150, 255, 0.6);
-  box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
-  transform: translateY(-1px);
-}
 
 /* 해금 비용 표시 */
 .unlock-cost {
@@ -565,23 +536,73 @@
 }
 
 .sidebar-icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
+/* Icon images are set via inline styles in JSX */
+
 .sidebar-icon.active {
-  background: rgba(100, 150, 255, 0.2);
-  border: 1px solid rgba(100, 150, 255, 0.5);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.active.search-icon {
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.active.home-icon {
+  background-color: rgba(100, 150, 255, 0.2);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.active.store-icon {
+  background-color: rgba(100, 150, 255, 0.2);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .sidebar-icon:hover {
   background: rgba(100, 150, 255, 0.1);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.search-icon:hover {
+  background-color: rgba(100, 150, 255, 0.1);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.home-icon:hover {
+  background-color: rgba(100, 150, 255, 0.1);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar-icon.store-icon:hover {
+  background-color: rgba(100, 150, 255, 0.1);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .sidebar-bottom-icon {

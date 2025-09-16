@@ -148,9 +148,21 @@ main {
   font-size: 18px;
   color: #FFFFFF;
   transition: background-color 0.3s ease;
-  text-decoration: none;
+  text-decoration: none !important;
   margin-top: 2rem;
   margin-left: 0.5rem;
+}
+
+/* 링크로 감싸진 회원가입 버튼의 밑줄 제거 */
+a {
+  text-decoration: none !important;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none !important;
 }
 
 .signupbutton:hover {
@@ -163,7 +175,7 @@ main {
   text-align: center;
   width: 100%;
   box-sizing: border-box;
-  margin-top: 20rem;
+  margin-top: 25rem;
 }
 
 .text1 {
