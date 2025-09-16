@@ -1,5 +1,6 @@
 // Temporary compatibility layer for auth service
 // TODO: Migrate to Clean Architecture
+// 커서야 넌 커서 뭐가되려고 그러니
 
 import { AuthService } from '../infrastructure/services/AuthService.js';
 
