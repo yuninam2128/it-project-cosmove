@@ -101,3 +101,67 @@ export const subscribeToUserProjects = (userId, callback) => {
     callback({ projects: [], positions: {} });
   });
 };
+
+// ===== Project detail (subtasks) helpers =====
+
+export const subscribeToProject = (projectId, callback) => {
+  if (!projectId) return () => {};
+  const ref = doc(db, 'projects', projectId);
+  return onSnapshot(ref, (snap) => {
+    if (!snap.exists()) {
+      callback(null);
+      return;
+    }
+    const data = snap.data();
+    callback({ id: snap.id, ...data });
+  }, (error) => {
+    console.error('프로젝트 구독 중 오류:', error);
+    callback(null);
+  });
+};
+
+export const addSubtask = async (projectId, subtask) => {
+  const ref = doc(db, 'projects', projectId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prev = Array.isArray(data.subtasks) ? data.subtasks : [];
+  const newSubtasks = [...prev, subtask];
+  await updateDoc(ref, { subtasks: newSubtasks, updatedAt: serverTimestamp() });
+  return newSubtasks;
+};
+
+export const updateSubtask = async (projectId, updatedSubtask) => {
+  const ref = doc(db, 'projects', projectId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prev = Array.isArray(data.subtasks) ? data.subtasks : [];
+  const newSubtasks = prev.map(st => st.id === updatedSubtask.id ? updatedSubtask : st);
+  await updateDoc(ref, { subtasks: newSubtasks, updatedAt: serverTimestamp() });
+  return newSubtasks;
+};
+
+export const deleteSubtask = async (projectId, subtaskId) => {
+  const ref = doc(db, 'projects', projectId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prev = Array.isArray(data.subtasks) ? data.subtasks : [];
+  const newSubtasks = prev.filter(st => st.id !== subtaskId);
+  // subtaskPositions에서도 제거
+  const nextPositions = { ...(data.subtaskPositions || {}) };
+  if (nextPositions[subtaskId]) delete nextPositions[subtaskId];
+  await updateDoc(ref, { subtasks: newSubtasks, subtaskPositions: nextPositions, updatedAt: serverTimestamp() });
+  return newSubtasks;
+};
+
+export const updateSubtaskPosition = async (projectId, subtaskId, position) => {
+  const ref = doc(db, 'projects', projectId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prevPositions = data.subtaskPositions || {};
+  const next = {
+    ...prevPositions,
+    [subtaskId]: { x: position.x, y: position.y, radius: position.radius }
+  };
+  await updateDoc(ref, { subtaskPositions: next, updatedAt: serverTimestamp() });
+  return next;
+};
