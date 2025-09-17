@@ -1,4 +1,6 @@
 // Sidebar 컴포넌트
+import React, { useState } from 'react';
+
 const Sidebar = ({ onPageChange, currentPage }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
