@@ -2,7 +2,7 @@
 // 이 컴포넌트는 프로젝트 정보를 수정할 수 있는 폼(모달)을 제공
 
 import { useState } from "react";
-import "./styles/EditProjectForm.css" // 스타일 파일 import
+import "./styles/ProjectForm.css" // 스타일 파일 import
 
 // EditProjectForm 컴포넌트 정의, project, onSubmit, onClose prop을 받음
 function EditProjectForm({ project, onSubmit, onClose }) {
@@ -27,7 +27,7 @@ function EditProjectForm({ project, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal">
         <h2>프로젝트 수정</h2>
 
         {/* 프로젝트 수정 폼 */}
@@ -35,20 +35,12 @@ function EditProjectForm({ project, onSubmit, onClose }) {
           {/* 이름 입력 */}
           <label>
             이름: 
-            <input 
-              type="text" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)} 
-            />
+            <input value={title} onChange={(e) => setTitle(e.target.value)} />
           </label>
           {/* 마감일 입력 */}
           <label>
             마감일: 
-            <input 
-              type="date" 
-              value={deadline} 
-              onChange={(e) => setDeadline(e.target.value)} 
-            />
+            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
           </label>
           {/* 진행도 입력 */}
           <label>
@@ -72,8 +64,10 @@ function EditProjectForm({ project, onSubmit, onClose }) {
           </label>
 
           {/* 저장 및 취소 버튼 */}
-          <button type="submit">저장</button>
-          <button type="button" onClick={onClose}>취소</button>
+          <div className="form-buttons">
+            <button type="submit-btn">저장</button>
+            <button type="cancel-btn" onClick={onClose}>취소</button>
+          </div>
         </form>
 
       </div>
