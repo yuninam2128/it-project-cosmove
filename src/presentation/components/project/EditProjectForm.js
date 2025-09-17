@@ -27,7 +27,7 @@ function EditProjectForm({ project, onSubmit, onClose }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2>프로젝트 수정</h2>
 
         {/* 프로젝트 수정 폼 */}
@@ -35,12 +35,20 @@ function EditProjectForm({ project, onSubmit, onClose }) {
           {/* 이름 입력 */}
           <label>
             이름: 
-            <input value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input 
+              type="text" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+            />
           </label>
           {/* 마감일 입력 */}
           <label>
             마감일: 
-            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+            <input 
+              type="date" 
+              value={deadline} 
+              onChange={(e) => setDeadline(e.target.value)} 
+            />
           </label>
           {/* 진행도 입력 */}
           <label>

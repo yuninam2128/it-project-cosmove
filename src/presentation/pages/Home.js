@@ -13,9 +13,9 @@ import ProjectForm from "../components/project/ProjectForm"; // (팝업)
 
 import "./Home.css"
 import { subscribeAuth, getCurrentUserDisplayName } from '../../services/auth';
-// 프로젝트 추가 관련 Firebase 연동 제거: 서비스 호출 사용 안 함
+
 import { 
-  // createProject,
+  createProject,
   updateProject,
   deleteProject as deleteProjectFromDB,
   updateProjectPosition,
@@ -207,20 +207,15 @@ function Home() {
       }
 
       const position = { x, y, radius };
-      
-      // 로컬 상태에만 프로젝트 추가 (Firebase 저장 제거)
-      const localId = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      const createdProject = {
-        id: localId,
-        ...newProject,
-        createdAt: new Date(),
-        ownerId: currentUser.uid,
-        subtasks: []
-      };
 
-      setProjects(prev => [...prev, createdProject]);
-      setPositions(prev => ({ ...prev, [localId]: position }));
-      console.log('로컬로 프로젝트가 추가되었습니다:', createdProject);
+      // 파이어베이스에 저장 (실시간 구독으로 UI 반영)
+      await createProject({
+        ...newProject,
+        ownerId: currentUser.uid,
+        position,
+        subtasks: []
+      });
+      console.log('프로젝트가 파이어베이스에 저장되었습니다.');
       
     } catch (error) {
       console.error('프로젝트 추가 중 오류:', error);
@@ -330,96 +325,14 @@ function Home() {
   }
 
   return ( 
-    // <div className ="container">
-    //   //좌측 사이드바
-    //   {/* <Sidebar /> */}
-
-    //   // 가운데 & 오른쪽 
-    //   <div className="main-content">
-    //     //헤더
-    //     <Header displayName={displayName} isLoadingName={isLoadingName} />
-
-    //     //콘텐트
-    //     <div className="content-area">
-    //         <div className="project-map-container">
-    //           <ProjectMap
-    //             projects={projects}
-    //             positions={positions}
-    //             onDeleteProject={deleteProject}
-    //             onEditProject={editProject}
-    //           onPositionsChange={handlePositionChange}
-    //         />
-          
-    //         {showForm && (
-    //           <ProjectForm
-    //             onSubmit={handleAddProject}
-    //             onClose={() => setShowForm(false)}
-    //           />
-    //         )}
-    //         </div>
-    //       <div>
-    //         <div className="right-sidebar">
-    //           <div className="todo">
-    //             <h3>오늘의 할 일</h3>
-    //             {/*투두리스트 추가예정*/}
-    //           </div>
-    //           <div className="inspiration">
-    //             <Inspiration />
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-
-    //     //타임라인
-    //     <footer className="timeline">
-    //       <ProjectTimeline projects={projects} />
-    //     </footer>
-    //   </div>
-    // </div>
-
     <div className="game-container">
 
       {/* 게임 스타일 사이드바 */}
       <div className="sidebar">
-        <div className="profile-section">
-          <div className="profile-avatar">
-            <div className="avatar-circle"></div>
-          </div>
-          <div className="profile-info">
-            <h2 className="profile-name">
-              {isLoadingName ? '로딩 중...' : (displayName || '코딩잘하고싶엉')}
-            </h2>
-            <button
-              className="logout-button"
-              onClick={() => navigate("/")}
-            >
-              로그아웃
-            </button>
-          </div>
-        </div>
-
-        <div className="menu-section">
-          <button
-            className="game-button search"
-          >
-            검색
-          </button>
-          <button 
-            className="game-button add-project"
-            onClick={() => setShowForm(true)}
-          >
-            프로젝트 추가
-          </button>
-          <button 
-            className="game-button store"
-            onClick={() => navigate("/store")}
-          >
-            상점
-          </button>
-        </div>
-        <div>
-          <h5>프로젝트 목록</h5>
-        </div>    
+        <Sidebar 
+          onAddProject={() => setShowForm(true)}
+          projects={projects} 
+        />
       </div>
 
       {/* 메인 콘텐츠 영역 */}

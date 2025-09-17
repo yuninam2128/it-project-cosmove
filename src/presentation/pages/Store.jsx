@@ -21,7 +21,6 @@ function Store() {
 
   return (
     <div className="app">
-        <button onClick={() => navigate(-1)}>뒤로가기</button>
         <CharacterGrid
         characters={characters}
         onSelect={handleSelect}
