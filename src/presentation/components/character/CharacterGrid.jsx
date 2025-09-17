@@ -197,11 +197,12 @@ function CharacterGrid({ characters, onSelect }) {
       {/* 사이드바 */}
       <div className="side-bar">
         <div className="sidebar-top-icons">
-          {/* 검색 아이콘 (활성화된 상태) */}
+          {/*
           <div 
             className="sidebar-icon search-icon active"
             style={{ backgroundImage: `url('/images/searchingIcon.png')` }}
           ></div>
+          */}
           
           {/* 홈 아이콘 */}
           <div 
