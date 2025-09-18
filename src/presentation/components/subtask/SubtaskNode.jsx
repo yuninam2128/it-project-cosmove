@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import EditSubtaskForm from "./EditSubtaskForm";
 
 function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
@@ -52,7 +52,7 @@ function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
     e.stopPropagation();
   };
 
-  const onMouseMove = (e) => {
+  const onMouseMove = useCallback((e) => {
     if (dragging) {
       const moveDistance = Math.sqrt(
         Math.pow(e.clientX - dragStartPos.x, 2) + 
@@ -64,9 +64,9 @@ function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
         onMove(node.id, e.clientX - offset.x, e.clientY - offset.y);
       }
     }
-  };
+  }, [dragging, dragStartPos, offset, onMove, node.id]);
 
-  const onMouseUp = (e) => {
+  const onMouseUp = useCallback((e) => {
     setDragging(false);
     
     if (!hasMoved) {
@@ -76,7 +76,7 @@ function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
     setHasMoved(false);
     e.preventDefault();
     e.stopPropagation();
-  };
+  }, [hasMoved, onClick]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -84,7 +84,7 @@ function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
   };
 
   // 전역 마우스 이벤트 처리
-  React.useEffect(() => {
+  useEffect(() => {
     const handleGlobalMouseMove = (e) => {
       if (dragging) {
         onMouseMove(e);
@@ -106,7 +106,7 @@ function SubtaskNode({ node, onMove, onClick, onEdit, onDelete }) {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [dragging, hasMoved, offset]);
+  }, [dragging, onMouseMove, onMouseUp]);
 
   // 노드 크기 계산 (반지름 기반)
   const nodeSize = node.radius ? node.radius * 2 : (node.isCenter ? 120 : 80);

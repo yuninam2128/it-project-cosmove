@@ -17,8 +17,8 @@ export const signIn = async (email, password) => {
   return await authService.signIn(email, password);
 };
 
-export const signUp = async (email, password, displayName) => {
-  return await authService.signUp(email, password, displayName);
+export const signUp = async (email, password, displayName, username) => {
+  return await authService.signUp(email, password, displayName, username);
 };
 
 export const signOut = async () => {
@@ -38,6 +38,6 @@ export const signInWithEmail = async (email, password) => {
   return await authService.signIn(email, password);
 };
 
-export const signUpWithEmail = async (email, password, displayName) => {
-  return await authService.signUp(email, password, displayName);
+export const signUpWithEmail = async (email, password, displayName, username) => {
+  return await authService.signUp(email, password, displayName, username);
 };

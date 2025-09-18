@@ -108,7 +108,7 @@ function ProjectMap({ projects, positions, onDeleteProject, onEditProject, onPos
         return next;
       });
     }
-  }, [positions]);
+  }, [positions, overlayPositions]);
 
   return (
     <div 

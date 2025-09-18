@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CharacterGrid.css";
 import CharacterDisplay from "./CharacterDisplay";
@@ -33,7 +33,7 @@ function CharacterGrid({ characters, onSelect }) {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   // 해금 조건을 만족하는지 확인하는 함수
-  const canUnlock = (character) => {
+  const canUnlock = useCallback((character) => {
     const { unlockCost } = character;
     return (
       userMoney.A >= unlockCost.A &&
@@ -41,7 +41,7 @@ function CharacterGrid({ characters, onSelect }) {
       userMoney.C >= unlockCost.C &&
       userMoney.D >= unlockCost.D
     );
-  };
+  }, [userMoney]);
 
   // 사용자 인증 상태 감지
   useEffect(() => {
@@ -124,7 +124,7 @@ function CharacterGrid({ characters, onSelect }) {
         return character;
       })
     );
-  }, [userMoney]);
+  }, [userMoney, canUnlock]);
 
   // 캐릭터 선택 함수
   const handleCharacterSelect = (character) => {

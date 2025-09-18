@@ -44,28 +44,7 @@ function ProjectDetail() {
     return 40;
   };
 
-  // 초기 subtask 위치 생성
-  const generateInitialPositions = (subtasks) => {
-    const positions = {};
-    const centerX = 400;
-    const centerY = 250;
-    const radius = 150;
-
-    subtasks.forEach((subtask, index) => {
-      const angle = (index * 2 * Math.PI) / subtasks.length;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
-      const nodeRadius = getRadius(subtask.priority);
-      
-      positions[subtask.id] = {
-        x: Math.max(50, Math.min(x, 750)),
-        y: Math.max(50, Math.min(y, 450)),
-        radius: nodeRadius
-      };
-    });
-
-    return positions;
-  };
+  // 초기 subtask 위치 생성 함수는 더 이상 사용하지 않음 (실시간 데이터 사용)
 
   // Subtask 추가
   const handleAddSubtask = async (newSubtask) => {
