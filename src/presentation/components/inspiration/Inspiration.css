@@ -4,7 +4,7 @@
   margin: 10px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 12px;
-  color: white;
+  color: rgb(255, 255, 255);
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -50,7 +50,7 @@
 
 /* 팝업 모달 스타일 */
 .modal.inspiration-popup {
-  background: white;
+  background: rgba(65, 65, 65, 0.473);
   border-radius: 16px;
   padding: 0;
   max-width: 400px;
@@ -82,7 +82,7 @@
 
 .card-content h4 {
   margin: 0 0 20px 0;
-  color: #333;
+  color: #dddddd;
   font-size: 1.4em;
   font-weight: bold;
 }
@@ -98,7 +98,7 @@
 }
 
 .card-description {
-  color: #666;
+  color: #dddddd;
   font-size: 1em;
   line-height: 1.5;
   margin: 0;
@@ -109,7 +109,7 @@
 .modal.inspiration-popup button {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgba(0, 0, 0, 0.3);
   color: white;
   border: none;
   border-radius: 0 0 16px 16px;
@@ -120,11 +120,11 @@
 }
 
 .modal.inspiration-popup button:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #5a6fd82d 0%, #6a419021 100%);
 }
 
 .modal.inspiration-popup button:focus {
-  outline: 3px solid #ffd700;
+  outline: 1px solid #e0e0e075;
   outline-offset: -3px;
 }
 
