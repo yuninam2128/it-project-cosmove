@@ -5,7 +5,7 @@ import "./ProjectList.jsx"
 import ProjectList from "./ProjectList.jsx";
 import "./Sidebar.css"; // CSS 파일 import 추가
 
-function GameSidebar({ onAddProject, projects }) {
+function Sidebar({ onAddProject, projects }) {
   const navigate = useNavigate();
 
   return (
@@ -37,14 +37,14 @@ function GameSidebar({ onAddProject, projects }) {
           <p>로그아웃</p>
         </button>
       </div>
-      <div className="project-list-section">
+      <div>
         <h3>프로젝트 목록</h3>
-        <div className="project-list-container">
-          <ProjectList projects={projects} />
-        </div>
+        <ProjectList 
+          projects={projects}
+        />
       </div>
     </div>
   );
 }
 
-export default GameSidebar;
+export default Sidebar;

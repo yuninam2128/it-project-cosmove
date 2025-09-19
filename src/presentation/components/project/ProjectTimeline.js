@@ -91,7 +91,7 @@ function ProjectTimeline({ projects = [] }) {
             {!errorMsg && (
               <div 
                 className={`simple-dot ${
-                  progressRatio > 1 
+                  progressRatio >= 1 
                   ? 'overdue'
                   : project.priority === '상' 
                   ? 'danger'

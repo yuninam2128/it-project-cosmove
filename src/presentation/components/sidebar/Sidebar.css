@@ -1,6 +1,6 @@
 .sidebar {
-  width: 80px; /* 접힌 상태 너비 */
-  height: 100vh;
+  width: 100%; /* 접힌 상태 너비 */
+  height: 100%;
   background: #2c2c2c;
   transition: width 0.3s ease;
   overflow: hidden;
@@ -12,10 +12,12 @@
   flex-direction: column;
   padding: 20px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
 }
 
 .sidebar:hover {
   width: 250px; /* 펼쳐진 상태 너비 */
+  border-radius: 20px;
 }
 
 .menu-section {
@@ -47,7 +49,7 @@
   width: 24px;
   height: 24px;
   min-width: 24px; /* 아이콘이 줄어들지 않도록 */
-  margin-right: 15px;
+  margin-right: 5px;
 }
 
 .game-button p {
@@ -66,7 +68,7 @@
 .game-button.add-project,
 .game-button.logout {
   justify-content: flex-start;
-  padding-left: 16px;
+  padding-left: 10px;
 }
 
 .game-button.add-project p,
