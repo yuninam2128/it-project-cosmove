@@ -1,6 +1,5 @@
 // Temporary compatibility layer for auth service
 // TODO: Migrate to Clean Architecture
-// 커서야 넌 커서 뭐가되려고 그러니
 
 import { AuthService } from '../infrastructure/services/AuthService.js';
 
@@ -18,8 +17,8 @@ export const signIn = async (email, password) => {
   return await authService.signIn(email, password);
 };
 
-export const signUp = async (email, password, displayName) => {
-  return await authService.signUp(email, password, displayName);
+export const signUp = async (email, password, displayName, username) => {
+  return await authService.signUp(email, password, displayName, username);
 };
 
 export const signOut = async () => {
@@ -39,6 +38,6 @@ export const signInWithEmail = async (email, password) => {
   return await authService.signIn(email, password);
 };
 
-export const signUpWithEmail = async (email, password, displayName) => {
-  return await authService.signUp(email, password, displayName);
+export const signUpWithEmail = async (email, password, displayName, username) => {
+  return await authService.signUp(email, password, displayName, username);
 };

@@ -28,12 +28,14 @@ function Sidebar({ onAddProject, projects }) {
           className="game-button add-project"
           onClick={onAddProject}
         >
+          <img src="/images/addIcon.png" alt="추가 아이콘"/>
           <p>프로젝트 추가</p>
         </button>
         <button 
           className="game-button logout"
           onClick={() => navigate("/")}
         >
+          <img src="/images/signoutIcon.png" alt="로그아웃 아이콘"/>
           <p>로그아웃</p>
         </button>
       </div>

@@ -1,7 +1,7 @@
 .sidebar {
   width: 100%; /* 접힌 상태 너비 */
   height: 100%;
-  background: #2c2c2c;
+  background: #2c2c2c48;
   transition: width 0.3s ease;
   overflow: hidden;
   position: fixed;
@@ -13,6 +13,7 @@
   padding: 20px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.517);
 }
 
 .sidebar:hover {
@@ -62,18 +63,6 @@
 
 .sidebar:hover .game-button p {
   opacity: 1;
-}
-
-/* 아이콘이 없는 버튼들 */
-.game-button.add-project,
-.game-button.logout {
-  justify-content: flex-start;
-  padding-left: 10px;
-}
-
-.game-button.add-project p,
-.game-button.logout p {
-  margin-left: 0;
 }
 
 /* 프로젝트 목록 섹션 */

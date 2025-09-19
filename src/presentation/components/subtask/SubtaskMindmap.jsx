@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import SubtaskNode from "./SubtaskNode";
 import SubtaskLine from "./SubtaskLine";
 import SubtaskForm from "./SubtaskForm";
@@ -101,7 +101,7 @@ function SubtaskMindmap({
     setLastMousePos({ x: e.clientX, y: e.clientY });
   };
 
-  const handleMapMouseMove = (e) => {
+  const handleMapMouseMove = useCallback((e) => {
     if (!isDragging || !lastMousePos) return;
 
     const dx = e.clientX - lastMousePos.x;
@@ -113,7 +113,7 @@ function SubtaskMindmap({
     }));
 
     setLastMousePos({ x: e.clientX, y: e.clientY });
-  };
+  }, [isDragging, lastMousePos]);
 
   const handleMapMouseUp = () => {
     setIsDragging(false);
@@ -121,7 +121,7 @@ function SubtaskMindmap({
   };
 
   // 전역 마우스 이벤트
-  React.useEffect(() => {
+  useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMapMouseMove);
       document.addEventListener('mouseup', handleMapMouseUp);
@@ -131,7 +131,7 @@ function SubtaskMindmap({
       document.removeEventListener('mousemove', handleMapMouseMove);
       document.removeEventListener('mouseup', handleMapMouseUp);
     };
-  }, [isDragging, lastMousePos]);
+  }, [isDragging, lastMousePos, handleMapMouseMove]);
 
   return (
     <div className="subtask-mindmap-container">
