@@ -328,7 +328,7 @@ function Home() {
     <div className="game-container">
 
       {/* 게임 스타일 사이드바 */}
-      <div className="sidebar">
+      <div className="sidebar-container">
         <Sidebar 
           onAddProject={() => setShowForm(true)}
           projects={projects} 

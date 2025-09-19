@@ -2,7 +2,7 @@
 
 .game-container {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 65px 1fr;
   height: 100vh;
   background: linear-gradient(135deg, #1a1b3d, #2d1b69);
   color: white;
@@ -12,11 +12,11 @@
 }
 
 /* 사이드바 스타일 */
-.sidebar {
+.sidebar-container {
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.517);
-  border-radius: 20px;
+  border-radius: 50px;
   padding: 20px;
   display: flex;
   flex-direction: column;

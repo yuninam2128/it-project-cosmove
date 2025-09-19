@@ -3,6 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import "./ProjectList.jsx"
 import ProjectList from "./ProjectList.jsx";
+import "./Sidebar.css"; // CSS 파일 import 추가
 
 function GameSidebar({ onAddProject, projects }) {
   const navigate = useNavigate();
@@ -36,12 +37,12 @@ function GameSidebar({ onAddProject, projects }) {
           <p>로그아웃</p>
         </button>
       </div>
-      <div>
+      <div className="project-list-section">
         <h3>프로젝트 목록</h3>
-        <ProjectList 
-          projects={projects}
-        />
-      </div>    
+        <div className="project-list-container">
+          <ProjectList projects={projects} />
+        </div>
+      </div>
     </div>
   );
 }

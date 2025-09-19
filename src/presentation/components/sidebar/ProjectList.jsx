@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "./ProjectList.css"; // CSS 파일 import 추가
 
 function ProjectList({ projects }) { // 1. props를 { projects }로 구조 분해하여 받습니다.
   const navigate = useNavigate(); // 2. 변수명을 소문자 navigate로 변경합니다.
