@@ -93,9 +93,9 @@ function ProjectTimeline({ projects = [] }) {
                 className={`simple-dot ${
                   progressRatio > 1 
                   ? 'overdue'
-                  : progressRatio > 0.8 
+                  : project.priority === '상' 
                   ? 'danger'
-                  : progressRatio > 0.6 
+                  : project.priority === '중' 
                   ? 'warning' 
                   : 'normal'
                 }`}

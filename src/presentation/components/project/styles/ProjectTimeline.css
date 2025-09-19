@@ -40,15 +40,15 @@
 
 /* 진행 상태별 색상 */
 .simple-dot.normal {
-  background: green; /* 정상 진행 */
+  background: rgb(149, 216, 255); /* 정상 진행 */
 }
 
 .simple-dot.warning {
-  background: orange; /* 60% 이상 */
+  background: rgb(252, 255, 154); /* 60% 이상 */
 }
 
 .simple-dot.danger {
-  background: red; /* 80% 이상 */
+  background: #ff91ca; /* 80% 이상 */
 }
 
 .simple-dot.overdue {
