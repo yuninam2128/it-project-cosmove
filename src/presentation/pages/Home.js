@@ -339,10 +339,12 @@ function Home() {
       <div className="main-content">
         {/* 헤더 */}
         <header className="main-header">
-          <p>{getCurrentDate()}</p>
-          <h1>
-            {isLoadingName ? '로딩 중...' : `${displayName || '사용자'}님`}, 오늘은 어떤 우주를 정복해볼까요?
-          </h1>
+          <Header 
+            isLoadingName={isLoadingName}
+            displayName={displayName}
+            currentDate={getCurrentDate()}
+            onAddClick={() => setShowForm(true)}
+          />
         </header>
 
         {/*작업영역*/}

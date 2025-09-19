@@ -46,21 +46,6 @@
   z-index: 5;
 }
 
-.main-header h1 {
-  margin: 0 0 5px 0;
-  font-size: 3rem;
-  background: linear-gradient(45deg, #60a5fa, #a78bfa);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.main-header p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1.1rem;
-}
-
 /* 작업영역 */
 .workspace {
   display: flex;
