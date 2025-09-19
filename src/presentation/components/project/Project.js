@@ -53,7 +53,7 @@ function Project({ project, onDeleteProject, onEditProject, position, onMouseDow
             project={project}
             onSubmit={onEditProject}
             onClose={() => setShowEditForm(false)}
-          />, 
+          />,
           document.body
         )
       )}

@@ -13,15 +13,8 @@ function GameSidebar({ onAddProject, projects }) {
         <button
           className="game-button search"
         >
-          <img src="/images/searchingIcon.png" alt="검색 아이콘"/>
-          <p>검색</p>
-        </button>
-        <button 
-          className="game-button add-project"
-          onClick={onAddProject}
-        >
-          <img src="/images/plusIcon.png" alt="더하기 아이콘"/>
-          <p>프로젝트 추가</p>
+          <img src="/images/homeIcon.png" alt="홈 아이콘"/>
+          <p>홈 화면</p>
         </button>
         <button 
           className="game-button store"
@@ -31,6 +24,12 @@ function GameSidebar({ onAddProject, projects }) {
           <p>스토어</p>
         </button>
         <button 
+          className="game-button add-project"
+          onClick={onAddProject}
+        >
+          <p>프로젝트 추가</p>
+        </button>
+        <button 
           className="game-button logout"
           onClick={() => navigate("/")}
         >
@@ -38,7 +37,7 @@ function GameSidebar({ onAddProject, projects }) {
         </button>
       </div>
       <div>
-        <h5>프로젝트 목록</h5>
+        <h3>프로젝트 목록</h3>
         <ProjectList 
           projects={projects}
         />

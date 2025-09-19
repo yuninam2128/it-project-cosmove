@@ -100,10 +100,12 @@ function ProjectTimeline({ projects = [] }) {
                 style={{
                   left: `${progressRatio * 100}%`, // 진행률에 따라 좌표 결정
                   background: progressRatio > 1 
-                    ? 'red'      // 마감 초과
+                    ? 'gray'      // 마감 초과
                     : progressRatio > 0.8 
-                    ? 'orange'   // 80% 이상 경과
-                    : 'green'    // 정상 진행 중
+                    ? 'red'   // 80% 이상 경과
+                    : progressRatio > 0.6 
+                    ? 'orange' // 50% 이상 경과
+                    : 'green',  // 정상 진행 중
                 }}
                 title={`${project.title} - ${Math.round(progressRatio * 100)}%`}
               >
@@ -111,33 +113,6 @@ function ProjectTimeline({ projects = [] }) {
               </div>
             )}
             
-            {/* 프로젝트 정보 박스 */}
-            <div 
-              style={{
-                position: 'absolute',
-                top: '70px',
-                left: `${index * 150}px`, // 각 프로젝트를 좌우로 배치
-                width: '140px',
-                background: errorMsg ? '#ffebee' : '#e8f5e8',
-                border: '1px solid ' + (errorMsg ? '#f44336' : '#4caf50'),
-                borderRadius: '4px',
-                padding: '8px',
-                fontSize: '11px'
-              }}
-            >
-              <strong>{project.title || `프로젝트 ${index + 1}`}</strong><br/>
-              {errorMsg ? (
-                // 날짜 오류 발생 시 에러 메시지 출력
-                <span style={{color: 'red'}}>❌ {errorMsg}</span>
-              ) : (
-                // 정상일 경우 상세 정보 표시
-                <>
-                  📅 시작: {createdDate ? createdDate.toLocaleDateString() : 'N/A'}<br/>
-                  🎯 마감: {deadlineDate ? deadlineDate.toLocaleDateString() : 'N/A'}<br/>
-                  📊 진행률: {Math.round(progressRatio * 100)}%
-                </>
-              )}
-            </div>
           </div>
         );
       })}
