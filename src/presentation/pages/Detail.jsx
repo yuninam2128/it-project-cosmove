@@ -208,6 +208,7 @@ function ProjectDetail() {
           <TodoManager
             subtask={selectedSubtask}
             onBack={handleBackToMindmap}
+            projectId={projectId}
           />
         )}
       </main>

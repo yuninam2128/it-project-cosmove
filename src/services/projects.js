@@ -9,6 +9,7 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  setDoc,
   doc,
   serverTimestamp,
   onSnapshot
@@ -164,4 +165,79 @@ export const updateSubtaskPosition = async (projectId, subtaskId, position) => {
   };
   await updateDoc(ref, { subtaskPositions: next, updatedAt: serverTimestamp() });
   return next;
+};
+
+// ===== Subtask Todo helpers =====
+
+export const subscribeToSubtaskTodos = (projectId, subtaskId, callback) => {
+  if (!projectId || !subtaskId) return () => callback({});
+  const ref = doc(db, 'projects', projectId, 'subtasks', subtaskId);
+  return onSnapshot(ref, (snap) => {
+    if (!snap.exists()) {
+      callback({});
+      return;
+    }
+    const data = snap.data();
+    callback(data.todos || {});
+  }, (error) => {
+    console.error('서브태스크 할일 구독 중 오류:', error);
+    callback({});
+  });
+};
+
+export const addSubtaskTodo = async (projectId, subtaskId, dateKey, todo) => {
+  const ref = doc(db, 'projects', projectId, 'subtasks', subtaskId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prevTodos = data.todos || {};
+  const dateTodos = prevTodos[dateKey] || [];
+  const newTodos = [...dateTodos, { ...todo, id: Date.now().toString() }];
+  
+  const nextTodos = {
+    ...prevTodos,
+    [dateKey]: newTodos
+  };
+  
+  if (snap.exists()) {
+    await updateDoc(ref, { todos: nextTodos, updatedAt: serverTimestamp() });
+  } else {
+    await setDoc(ref, { todos: nextTodos, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+  }
+  return nextTodos;
+};
+
+export const updateSubtaskTodo = async (projectId, subtaskId, dateKey, todoId, updates) => {
+  const ref = doc(db, 'projects', projectId, 'subtasks', subtaskId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prevTodos = data.todos || {};
+  const dateTodos = prevTodos[dateKey] || [];
+  const newTodos = dateTodos.map(todo => 
+    todo.id === todoId ? { ...todo, ...updates } : todo
+  );
+  
+  const nextTodos = {
+    ...prevTodos,
+    [dateKey]: newTodos
+  };
+  
+  await updateDoc(ref, { todos: nextTodos, updatedAt: serverTimestamp() });
+  return nextTodos;
+};
+
+export const deleteSubtaskTodo = async (projectId, subtaskId, dateKey, todoId) => {
+  const ref = doc(db, 'projects', projectId, 'subtasks', subtaskId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const prevTodos = data.todos || {};
+  const dateTodos = prevTodos[dateKey] || [];
+  const newTodos = dateTodos.filter(todo => todo.id !== todoId);
+  
+  const nextTodos = {
+    ...prevTodos,
+    [dateKey]: newTodos
+  };
+  
+  await updateDoc(ref, { todos: nextTodos, updatedAt: serverTimestamp() });
+  return nextTodos;
 };

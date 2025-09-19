@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import { signUpWithEmail } from "../../services/auth";
 
+
+
 function SignupPage() {
   const navigate = useNavigate();
 
