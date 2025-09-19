@@ -46,12 +46,6 @@ function ProjectTimeline({ projects = [] }) {
       {/* 기본 타임라인 선 */}
       <div className="simple-line"></div>
       
-      {/* 디버깅 정보 표시 */}
-      <div className="debug-info">
-        <div>현재 시간: {now.toLocaleString()}</div>
-        <div>프로젝트 수: {projects.length}</div>
-      </div>
-      
       {/* 각 프로젝트를 순회하며 타임라인에 표시 */}
       {projects.map((project, index) => {
         // createdAt, deadline을 Date 객체로 변환
@@ -96,20 +90,20 @@ function ProjectTimeline({ projects = [] }) {
             {/* 타임라인 점 (에러 없을 경우만 표시) */}
             {!errorMsg && (
               <div 
-                className="simple-dot"
+                className={`simple-dot ${
+                  progressRatio > 1 
+                  ? 'overdue'
+                  : progressRatio > 0.8 
+                  ? 'danger'
+                  : progressRatio > 0.6 
+                  ? 'warning' 
+                  : 'normal'
+                }`}
                 style={{
-                  left: `${progressRatio * 100}%`, // 진행률에 따라 좌표 결정
-                  background: progressRatio > 1 
-                    ? 'gray'      // 마감 초과
-                    : progressRatio > 0.8 
-                    ? 'red'   // 80% 이상 경과
-                    : progressRatio > 0.6 
-                    ? 'orange' // 50% 이상 경과
-                    : 'green',  // 정상 진행 중
+                  left: `${progressRatio * 100}%`,
                 }}
                 title={`${project.title} - ${Math.round(progressRatio * 100)}%`}
               >
-                {index + 1}
               </div>
             )}
             
