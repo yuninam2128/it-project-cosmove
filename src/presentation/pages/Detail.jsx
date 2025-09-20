@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import SubtaskMindmap from "../components/subtask/SubtaskMindmap";
 import TodoManager from "../components/todo/TodoManager";
 import "./Detail.css";
+import Sidebar from "../components/sidebar/Sidebar";
+import DetailHeader from "../components/header/DetailHeader";
 import { 
   subscribeToProject,
   addSubtask,
@@ -10,11 +12,16 @@ import {
   deleteSubtask,
   updateSubtaskPosition
 } from '../../services/projects';
+import Inspiration from "../components/inspiration/Inspiration";
 
 
 function ProjectDetail() {
   const { projectId } = useParams();
   const navigate = useNavigate();
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
   
   const [project, setProject] = useState(null);
   const [currentView, setCurrentView] = useState('mindmap'); // 'mindmap' | 'todo'
@@ -166,52 +173,54 @@ function ProjectDetail() {
 
   return (
     <div className="project-detail-container">
-      {/* 헤더 */}
-      <header className="project-detail-header">
-        <button 
-          className="back-button"
-          onClick={() => navigate('/home')}
-        >
-          ← 홈으로 돌아가기
-        </button>
-        <div className="project-info">
-          <h1>{project.title}</h1>
-          <div className="project-meta">
-            <span className={`priority-badge ${project.priority}`}>
-              중요도: {project.priority}
-            </span>
-            <span className="progress-badge">
-              진행도: {project.progress}%
-            </span>
-            <span className="deadline-badge">
-              마감일: {project.deadline.toLocaleDateString('ko-KR')}
-            </span>
+      {/*사이드바*/}
+      <div className="subtask-sidebar">
+        <Sidebar />
+      </div>
+      <div className="main-area">
+        {/* 헤더 */}
+        <header className="project-detail-header">
+          <DetailHeader 
+            onAddSubtask={handleAddSubtask}
+            currentDate={getCurrentDate()}
+            project={project}
+          />
+        </header>
+        {/* 메인 콘텐츠 */}
+        <div className="subtask-workspace">
+          <div className="project-detail-main">
+            {currentView === 'mindmap' && (
+              <SubtaskMindmap
+                project={project}
+                positions={subtaskPositions}
+                onSubtaskClick={handleSubtaskClick}
+                onAddSubtask={handleAddSubtask}
+                onEditSubtask={handleEditSubtask}
+                onDeleteSubtask={handleDeleteSubtask}
+                onPositionChange={handleSubtaskPositionChange}
+              />
+            )}
+          </div>
+          <div className="project-detail-right">
+            <div>
+              {currentView === 'todo' && selectedSubtask && (
+                <TodoManager
+                  subtask={selectedSubtask}
+                  onBack={handleBackToMindmap}
+                  projectId={projectId}
+                />
+              )}
+            </div>
+            <div>
+              <Inspiration />
+            </div>
           </div>
         </div>
-      </header>
-
-      {/* 메인 콘텐츠 */}
-      <main className="project-detail-main">
-        {currentView === 'mindmap' && (
-          <SubtaskMindmap
-            project={project}
-            positions={subtaskPositions}
-            onSubtaskClick={handleSubtaskClick}
-            onAddSubtask={handleAddSubtask}
-            onEditSubtask={handleEditSubtask}
-            onDeleteSubtask={handleDeleteSubtask}
-            onPositionChange={handleSubtaskPositionChange}
-          />
-        )}
-
-        {currentView === 'todo' && selectedSubtask && (
-          <TodoManager
-            subtask={selectedSubtask}
-            onBack={handleBackToMindmap}
-            projectId={projectId}
-          />
-        )}
-      </main>
+        <footer className="project-detail-footer">
+          타임라인
+        </footer>
+      </div>
+      
     </div>
   );
 }

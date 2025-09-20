@@ -380,7 +380,7 @@ function Home() {
 
         {/* 타임라인 */}
         <footer className="timeline-footer">
-          <ProjectTimeline projects={projects} />
+          <ProjectTimeline />
         </footer>
       </div>
     </div>
