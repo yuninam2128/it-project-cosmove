@@ -3,87 +3,45 @@ import { useParams, useNavigate } from "react-router-dom";
 import SubtaskMindmap from "../components/subtask/SubtaskMindmap";
 import TodoManager from "../components/todo/TodoManager";
 import "./Detail.css";
+import Sidebar from "../components/sidebar/Sidebar";
+import DetailHeader from "../components/header/DetailHeader";
+import { 
+  subscribeToProject,
+  addSubtask,
+  updateSubtask,
+  deleteSubtask,
+  updateSubtaskPosition
+} from '../../services/projects';
+import Inspiration from "../components/inspiration/Inspiration";
 
-// 더미 데이터 (실제로는 Firebase에서 가져올 데이터)
-const getDummyProjectData = (projectId) => ({
-  id: projectId,
-  title: "웹사이트 개발 프로젝트",
-  deadline: new Date("2024-12-31"),
-  progress: 65,
-  priority: "상",
-  description: "회사 홈페이지 리뉴얼 프로젝트",
-  subtasks: [
-    {
-      id: "101",
-      title: "기획 정리",
-      deadline: new Date("2024-09-15"),
-      progress: 100,
-      priority: "상",
-      startDate: "2024-09-05",
-      endDate: "2024-09-15",
-      description: "요구사항 분석 및 기획서 작성"
-    },
-    {
-      id: "102", 
-      title: "UI 디자인",
-      deadline: new Date("2024-09-25"),
-      progress: 80,
-      priority: "상",
-      startDate: "2024-09-10",
-      endDate: "2024-09-25",
-      description: "화면 설계 및 디자인 시안 제작"
-    },
-    {
-      id: "103",
-      title: "프론트엔드 개발", 
-      deadline: new Date("2024-10-15"),
-      progress: 45,
-      priority: "중",
-      startDate: "2024-09-20",
-      endDate: "2024-10-15",
-      description: "React 기반 사용자 인터페이스 구현"
-    },
-    {
-      id: "104",
-      title: "백엔드 개발",
-      deadline: new Date("2024-10-20"),
-      progress: 30,
-      priority: "중", 
-      startDate: "2024-09-25",
-      endDate: "2024-10-20",
-      description: "API 서버 및 데이터베이스 구축"
-    },
-    {
-      id: "105",
-      title: "테스트 & 배포",
-      deadline: new Date("2024-11-01"),
-      progress: 0,
-      priority: "하",
-      startDate: "2024-10-15",
-      endDate: "2024-11-01", 
-      description: "QA 테스트 및 프로덕션 배포"
-    }
-  ]
-});
 
 function ProjectDetail() {
   const { projectId } = useParams();
   const navigate = useNavigate();
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
   
   const [project, setProject] = useState(null);
   const [currentView, setCurrentView] = useState('mindmap'); // 'mindmap' | 'todo'
   const [selectedSubtask, setSelectedSubtask] = useState(null);
   const [subtaskPositions, setSubtaskPositions] = useState({});
 
-  // 프로젝트 데이터 로드
+  // 프로젝트 데이터 실시간 구독
   useEffect(() => {
-    // 실제로는 Firebase에서 프로젝트 데이터를 가져옴
-    const projectData = getDummyProjectData(projectId);
-    setProject(projectData);
-    
-    // 초기 subtask 위치 설정
-    const initialPositions = generateInitialPositions(projectData.subtasks);
-    setSubtaskPositions(initialPositions);
+    if (!projectId) return;
+    const unsubscribe = subscribeToProject(projectId, (p) => {
+      if (!p) return;
+      setProject({
+        ...p,
+        deadline: p.deadline ? new Date(p.deadline.toDate ? p.deadline.toDate() : p.deadline) : new Date(),
+      });
+      // 서브태스크 위치
+      const pos = p.subtaskPositions || {};
+      setSubtaskPositions(pos);
+    });
+    return () => unsubscribe && unsubscribe();
   }, [projectId]);
 
   // 중요도에 따른 원 크기 반환
@@ -93,33 +51,11 @@ function ProjectDetail() {
     return 40;
   };
 
-  // 초기 subtask 위치 생성
-  const generateInitialPositions = (subtasks) => {
-    const positions = {};
-    const centerX = 400;
-    const centerY = 250;
-    const radius = 150;
-
-    subtasks.forEach((subtask, index) => {
-      const angle = (index * 2 * Math.PI) / subtasks.length;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
-      const nodeRadius = getRadius(subtask.priority);
-      
-      positions[subtask.id] = {
-        x: Math.max(50, Math.min(x, 750)),
-        y: Math.max(50, Math.min(y, 450)),
-        radius: nodeRadius
-      };
-    });
-
-    return positions;
-  };
+  // 초기 subtask 위치 생성 함수는 더 이상 사용하지 않음 (실시간 데이터 사용)
 
   // Subtask 추가
-  const handleAddSubtask = (newSubtask) => {
+  const handleAddSubtask = async (newSubtask) => {
     if (!project) return;
-
     const subtaskId = `subtask_${Date.now()}`;
     const subtaskWithId = {
       ...newSubtask,
@@ -127,21 +63,13 @@ function ProjectDetail() {
       deadline: new Date(newSubtask.deadline),
       progress: Number(newSubtask.progress)
     };
-
-    // 새 subtask 위치 계산
     const newPosition = findAvailablePosition();
-    
-    setProject(prev => ({
-      ...prev,
-      subtasks: [...prev.subtasks, subtaskWithId]
-    }));
-
-    setSubtaskPositions(prev => ({
-      ...prev,
-      [subtaskId]: newPosition
-    }));
-
-    console.log('Subtask 추가됨:', subtaskWithId);
+    // 낙관적 업데이트
+    setProject(prev => ({ ...prev, subtasks: [...(prev?.subtasks || []), subtaskWithId] }));
+    setSubtaskPositions(prev => ({ ...prev, [subtaskId]: newPosition }));
+    // 파이어베이스 반영
+    await addSubtask(project.id, subtaskWithId);
+    await updateSubtaskPosition(project.id, subtaskId, newPosition);
   };
 
   // 사용 가능한 위치 찾기
@@ -178,23 +106,17 @@ function ProjectDetail() {
   };
 
   // Subtask 수정
-  const handleEditSubtask = (updatedSubtask) => {
+  const handleEditSubtask = async (updatedSubtask) => {
     if (!project) return;
-
+    const normalized = {
+      ...updatedSubtask,
+      deadline: new Date(updatedSubtask.deadline),
+      progress: Number(updatedSubtask.progress)
+    };
     setProject(prev => ({
       ...prev,
-      subtasks: prev.subtasks.map(subtask =>
-        subtask.id === updatedSubtask.id
-          ? { 
-              ...updatedSubtask,
-              deadline: new Date(updatedSubtask.deadline),
-              progress: Number(updatedSubtask.progress)
-            }
-          : subtask
-      )
+      subtasks: prev.subtasks.map(subtask => subtask.id === normalized.id ? normalized : subtask)
     }));
-
-    // 중요도가 변경된 경우 크기 업데이트
     const newRadius = getRadius(updatedSubtask.priority);
     setSubtaskPositions(prev => ({
       ...prev,
@@ -203,38 +125,30 @@ function ProjectDetail() {
         radius: newRadius
       }
     }));
-
-    console.log('Subtask 수정됨:', updatedSubtask);
+    await updateSubtask(project.id, normalized);
   };
 
   // Subtask 삭제
-  const handleDeleteSubtask = (subtaskId) => {
+  const handleDeleteSubtask = async (subtaskId) => {
     if (!project) return;
-
     setProject(prev => ({
       ...prev,
       subtasks: prev.subtasks.filter(subtask => subtask.id !== subtaskId)
     }));
-
     setSubtaskPositions(prev => {
       const newPositions = { ...prev };
       delete newPositions[subtaskId];
       return newPositions;
     });
-
-    console.log('Subtask 삭제됨:', subtaskId);
+    await deleteSubtask(project.id, subtaskId);
   };
 
   // Subtask 위치 변경
-  const handleSubtaskPositionChange = (subtaskId, x, y) => {
-    setSubtaskPositions(prev => ({
-      ...prev,
-      [subtaskId]: {
-        ...prev[subtaskId],
-        x,
-        y
-      }
-    }));
+  const handleSubtaskPositionChange = async (subtaskId, x, y) => {
+    const radius = subtaskPositions?.[subtaskId]?.radius || 55;
+    const pos = { x, y, radius };
+    setSubtaskPositions(prev => ({ ...prev, [subtaskId]: pos }));
+    if (project) await updateSubtaskPosition(project.id, subtaskId, pos);
   };
 
   // Subtask 노드 클릭 (Todo 관리로 이동)
@@ -259,51 +173,54 @@ function ProjectDetail() {
 
   return (
     <div className="project-detail-container">
-      {/* 헤더 */}
-      <header className="project-detail-header">
-        <button 
-          className="back-button"
-          onClick={() => navigate('/home')}
-        >
-          ← 홈으로 돌아가기
-        </button>
-        <div className="project-info">
-          <h1>{project.title}</h1>
-          <div className="project-meta">
-            <span className={`priority-badge ${project.priority}`}>
-              중요도: {project.priority}
-            </span>
-            <span className="progress-badge">
-              진행도: {project.progress}%
-            </span>
-            <span className="deadline-badge">
-              마감일: {project.deadline.toLocaleDateString('ko-KR')}
-            </span>
+      {/*사이드바*/}
+      <div className="subtask-sidebar">
+        <Sidebar />
+      </div>
+      <div className="main-area">
+        {/* 헤더 */}
+        <header className="project-detail-header">
+          <DetailHeader 
+            onAddSubtask={handleAddSubtask}
+            currentDate={getCurrentDate()}
+            project={project}
+          />
+        </header>
+        {/* 메인 콘텐츠 */}
+        <div className="subtask-workspace">
+          <div className="project-detail-main">
+            {currentView === 'mindmap' && (
+              <SubtaskMindmap
+                project={project}
+                positions={subtaskPositions}
+                onSubtaskClick={handleSubtaskClick}
+                onAddSubtask={handleAddSubtask}
+                onEditSubtask={handleEditSubtask}
+                onDeleteSubtask={handleDeleteSubtask}
+                onPositionChange={handleSubtaskPositionChange}
+              />
+            )}
+          </div>
+          <div className="project-detail-right">
+            <div>
+              {currentView === 'todo' && selectedSubtask && (
+                <TodoManager
+                  subtask={selectedSubtask}
+                  onBack={handleBackToMindmap}
+                  projectId={projectId}
+                />
+              )}
+            </div>
+            <div>
+              <Inspiration />
+            </div>
           </div>
         </div>
-      </header>
-
-      {/* 메인 콘텐츠 */}
-      <main className="project-detail-main">
-        {currentView === 'mindmap' && (
-          <SubtaskMindmap
-            project={project}
-            positions={subtaskPositions}
-            onSubtaskClick={handleSubtaskClick}
-            onAddSubtask={handleAddSubtask}
-            onEditSubtask={handleEditSubtask}
-            onDeleteSubtask={handleDeleteSubtask}
-            onPositionChange={handleSubtaskPositionChange}
-          />
-        )}
-
-        {currentView === 'todo' && selectedSubtask && (
-          <TodoManager
-            subtask={selectedSubtask}
-            onBack={handleBackToMindmap}
-          />
-        )}
-      </main>
+        <footer className="project-detail-footer">
+          타임라인
+        </footer>
+      </div>
+      
     </div>
   );
 }

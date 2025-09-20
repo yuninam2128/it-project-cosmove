@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CharacterGrid.css";
 import CharacterDisplay from "./CharacterDisplay";
 import { saveUserCharacterData, getUserCharacterData, initializeUserCharacterData } from "../../../services/characters";
-import { subscribeAuth } from "../../../services/auth";
+import { subscribeAuth } from  "../../../services/auth"
+import Sidebar from "../sidebar/Sidebar";
 
 function CharacterGrid({ characters, onSelect }) {
+  const navigate = useNavigate();
+    
   // 사용자 인증 상태
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +34,7 @@ function CharacterGrid({ characters, onSelect }) {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   // 해금 조건을 만족하는지 확인하는 함수
-  const canUnlock = React.useCallback((character) => {
+  const canUnlock = useCallback((character) => {
     const { unlockCost } = character;
     return (
       userMoney.A >= unlockCost.A &&
@@ -121,7 +125,7 @@ function CharacterGrid({ characters, onSelect }) {
         return character;
       })
     );
-  }, [canUnlock]);
+  }, [userMoney, canUnlock]);
 
   // 캐릭터 선택 함수
   const handleCharacterSelect = (character) => {
@@ -133,13 +137,6 @@ function CharacterGrid({ characters, onSelect }) {
     }
   };
 
-  // 돈 추가 함수 (테스트용)
-  const addMoney = (type, amount) => {
-    setUserMoney(prev => ({
-      ...prev,
-      [type]: prev[type] + amount
-    }));
-  };
 
   // 닉네임 편집 시작
   const startEditingNickname = () => {
@@ -195,49 +192,7 @@ function CharacterGrid({ characters, onSelect }) {
     <div className="backgroundColor">
       {/* 사이드바 */}
       <div className="side-bar">
-        <div className="sidebar-top-icons">
-          {/* 원자 모형 아이콘 (활성화된 상태) */}
-          <div className="sidebar-icon active">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="3" fill="#4A90E2"/>
-              <circle cx="12" cy="12" r="8" stroke="white" strokeWidth="2"/>
-              <circle cx="12" cy="12" r="12" stroke="white" strokeWidth="1" opacity="0.5"/>
-            </svg>
-          </div>
-          
-          {/* 돋보기 아이콘 */}
-          <div className="sidebar-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle cx="11" cy="11" r="8" stroke="white" strokeWidth="2"/>
-              <path d="m21 21-4.35-4.35" stroke="white" strokeWidth="2"/>
-            </svg>
-          </div>
-          
-          {/* 집 아이콘 */}
-          <div className="sidebar-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="white" strokeWidth="2"/>
-              <polyline points="9,22 9,12 15,12 15,22" stroke="white" strokeWidth="2"/>
-            </svg>
-          </div>
-          
-          {/* 상점 아이콘 */}
-          <div className="sidebar-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="white" strokeWidth="2"/>
-              <polyline points="9,22 9,12 15,12 15,22" stroke="white" strokeWidth="2"/>
-              <path d="M8 7h8" stroke="white" strokeWidth="2"/>
-            </svg>
-          </div>
-        </div>
-        
-        {/* 하단 사용자 프로필 아이콘 */}
-        <div className="sidebar-bottom-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="white" strokeWidth="2"/>
-            <circle cx="12" cy="7" r="4" stroke="white" strokeWidth="2"/>
-          </svg>
-        </div>
+        <Sidebar />
       </div>
       
       <div className="backRectangle">
@@ -246,20 +201,12 @@ function CharacterGrid({ characters, onSelect }) {
           <CharacterDisplay character={selectedCharacter || unlockedCharacters.find(char => char.unlocked)} />
         </div>
       
-        {/* 사용자 보유 돈 표시 (테스트용) */}
+        {/* 사용자 보유 돈 표시 */}
         <div className="money-display">
           <div>A: {userMoney.A}</div>
           <div>B: {userMoney.B}</div>
           <div>C: {userMoney.C}</div>
           <div>D: {userMoney.D}</div>
-        </div>
-
-        {/* 테스트용 돈 추가 버튼들 */}
-        <div className="test-buttons">
-          <button onClick={() => addMoney('A', 1)}>A+1</button>
-          <button onClick={() => addMoney('B', 1)}>B+1</button>
-          <button onClick={() => addMoney('C', 1)}>C+1</button>
-          <button onClick={() => addMoney('D', 1)}>D+1</button>
         </div>
 
         <div className="character-grid">

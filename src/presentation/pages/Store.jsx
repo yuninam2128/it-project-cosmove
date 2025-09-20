@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import CharacterGrid from "../components/character/CharacterGrid";
 import charactersData from "../../data/characters";
 
@@ -7,7 +6,7 @@ function Store() {
   const [characters, setCharacters] = useState(charactersData);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSelect = (char) => {
     if (char.unlocked) setSelectedCharacter(char);
@@ -21,7 +20,6 @@ function Store() {
 
   return (
     <div className="app">
-        <button onClick={() => navigate(-1)}>뒤로가기</button>
         <CharacterGrid
         characters={characters}
         onSelect={handleSelect}

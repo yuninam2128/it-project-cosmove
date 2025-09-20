@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import { signUpWithEmail } from "../../services/auth";
 
+
+
 function SignupPage() {
   const navigate = useNavigate();
 
@@ -12,9 +14,11 @@ function SignupPage() {
   const [passwordErrorMsg, setPasswordErrorMsg] = useState(""); // 비밀번호 에러 메시지
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState(""); // 아이디 상태 추가
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState(""); // 아이디 에러 상태 추가
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +26,9 @@ function SignupPage() {
     setSubmitError("");
     setEmailError("");
     setPasswordErrorMsg("");
+    setUsernameError("");
 
-    if (!email || !password || !passwordConfirm || !name) {
+    if (!email || !password || !passwordConfirm || !name || !username) {
       setSubmitError("모든 필드를 입력해주세요.");
       return;
     }
@@ -31,6 +36,12 @@ function SignupPage() {
     // 간단한 이메일 형식 체크
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setSubmitError("유효한 이메일을 입력해주세요.");
+      return;
+    }
+
+    // 아이디 형식 체크 (영문, 숫자, 3-20자)
+    if (!/^[a-zA-Z0-9]{3,20}$/.test(username)) {
+      setUsernameError("아이디는 영문, 숫자만 사용 가능하며 3-20자여야 합니다.");
       return;
     }
 
@@ -43,7 +54,7 @@ function SignupPage() {
 
     try {
       setSubmitting(true);
-      await signUpWithEmail(email, password, name);
+      await signUpWithEmail(email, password, name, username);
       navigate("/");
     } catch (err) {
       const code = err?.code || "";
@@ -76,7 +87,18 @@ function SignupPage() {
             onSubmit={handleSubmit}
           >
             <div className="id">
-              <input type="text" placeholder="아이디" />
+              <input 
+                type="text" 
+                placeholder="아이디" 
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setUsernameError("");
+                }}
+              />
+              {usernameError && (
+                <div style={{ color: 'red', fontSize: 14 }}>{usernameError}</div>
+              )}
             </div> 
 
             <div className="password">

@@ -7,7 +7,7 @@ import "./styles/Project.css";
 import penIcon from "../images/edit.png";
 import trashcanIcon from "../images/delete.png";
 
-function Project({ project, onDeleteProject, onEditProject, position }) {
+function Project({ project, onDeleteProject, onEditProject, position, onMouseDownProject, preventNavigate }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const isCompleted = project.progress === 100;
@@ -15,21 +15,23 @@ function Project({ project, onDeleteProject, onEditProject, position }) {
 
   return (
     <div
-      className="project-wrapper"
+      className="project-wrapper project-container"
       style={{
         position: "absolute",
         top: `${position.top}px`,
         left: `${position.left}px`,
       }}
+      onMouseDown={(e) => onMouseDownProject && onMouseDownProject(project.id, e)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* 프로젝트 상세 페이지로 이동하는 링크 */}
       <Link 
-        to={`/project/${project.id}`} 
-        state={{ project }} 
+        to={preventNavigate ? '#' : `/project/${project.id}`} 
+        state={preventNavigate ? undefined : { project }} 
         className={priorityClass}
         style={{ textDecoration: 'none' }}
+        onClick={(e) => { if (preventNavigate) e.preventDefault(); }}
       >
         <span className="project-title">{project.title}</span>
       </Link>
@@ -51,7 +53,7 @@ function Project({ project, onDeleteProject, onEditProject, position }) {
             project={project}
             onSubmit={onEditProject}
             onClose={() => setShowEditForm(false)}
-          />, 
+          />,
           document.body
         )
       )}

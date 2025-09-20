@@ -2,7 +2,7 @@
 // 이 컴포넌트는 프로젝트 정보를 수정할 수 있는 폼(모달)을 제공
 
 import { useState } from "react";
-import "./styles/EditProjectForm.css" // 스타일 파일 import
+import "./styles/ProjectForm.css" // 스타일 파일 import
 
 // EditProjectForm 컴포넌트 정의, project, onSubmit, onClose prop을 받음
 function EditProjectForm({ project, onSubmit, onClose }) {
@@ -64,8 +64,10 @@ function EditProjectForm({ project, onSubmit, onClose }) {
           </label>
 
           {/* 저장 및 취소 버튼 */}
-          <button type="submit">저장</button>
-          <button type="button" onClick={onClose}>취소</button>
+          <div className="form-buttons">
+            <button type="submit-btn">저장</button>
+            <button type="cancel-btn" onClick={onClose}>취소</button>
+          </div>
         </form>
 
       </div>
